@@ -1,0 +1,6 @@
+{
+  "name": "AI Success Hub",
+  "description": "All-in-one AI platform featuring Veo 3 AI Video Generation, Image/Video Watermark Removers, Multi-language support, PDF Suite, and AI Tools.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
