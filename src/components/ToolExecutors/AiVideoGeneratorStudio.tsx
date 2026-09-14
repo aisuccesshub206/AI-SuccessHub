@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { UserProfile, GeneratedVideoItem } from '../../types';
 import { useLanguage } from '../../context/LanguageContext';
+import { getApiUrl } from '../../services/mobileService';
 
 interface AiVideoGeneratorStudioProps {
   user: UserProfile;
@@ -62,7 +63,16 @@ export const AiVideoGeneratorStudio: React.FC<AiVideoGeneratorStudioProps> = ({
   const [tab, setTab] = useState<'text-to-video' | 'image-to-video'>('text-to-video');
 
   // Form State
-  const [prompt, setPrompt] = useState('An epic cinematic close-up of a futuristic cybernetic tiger running through a neon-lit cyberpunk city in heavy rain, dramatic volumetric lighting, photorealistic details');
+  const [prompt, setPrompt] = useState(() => {
+    try {
+      const transferred = sessionStorage.getItem('ais_transfer_prompt');
+      if (transferred) {
+        sessionStorage.removeItem('ais_transfer_prompt');
+        return transferred;
+      }
+    } catch {}
+    return 'An epic cinematic close-up of a futuristic cybernetic tiger running through a neon-lit cyberpunk city in heavy rain, dramatic volumetric lighting, photorealistic details';
+  });
   const [negativePrompt, setNegativePrompt] = useState('blurry, low quality, distortion, glitches, bad physics, text overlays, watermarks');
   const [scenePrompt, setScenePrompt] = useState('Scene 1: Camera orbits slowly around tiger eyes. Scene 2: Tiger leaps over neon puddle with water splash reflection.');
   const [characterConsistency, setCharacterConsistency] = useState('CyberTiger-V3-MetallicGlow');
@@ -155,7 +165,7 @@ export const AiVideoGeneratorStudio: React.FC<AiVideoGeneratorStudioProps> = ({
 
     try {
       // Send Request to Backend
-      const res = await fetch('/api/ai/video/generate', {
+      const res = await fetch(getApiUrl('/api/ai/video/generate'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -203,7 +213,7 @@ export const AiVideoGeneratorStudio: React.FC<AiVideoGeneratorStudioProps> = ({
   const pollJobStatus = (jobId: string) => {
     const pollInterval = setInterval(async () => {
       try {
-        const res = await fetch(`/api/ai/video/status/${jobId}`);
+        const res = await fetch(getApiUrl(`/api/ai/video/status/${jobId}`));
         if (!res.ok) {
           clearInterval(pollInterval);
           setIsGenerating(false);

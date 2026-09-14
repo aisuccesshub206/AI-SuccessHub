@@ -5,6 +5,10 @@ import { LANGUAGES, TRANSLATIONS, LanguageOption } from '../data/translations';
 interface LanguageContextType {
   language: LanguageCode;
   setLanguage: (lang: LanguageCode) => void;
+  inputLanguage: LanguageCode;
+  setInputLanguage: (lang: LanguageCode) => void;
+  outputLanguage: LanguageCode;
+  setOutputLanguage: (lang: LanguageCode) => void;
   currentLanguage: LanguageOption;
   languages: LanguageOption[];
   t: (key: string, defaultText?: string) => string;
@@ -16,9 +20,19 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<LanguageCode>(() => {
     const saved = localStorage.getItem('ais_user_language');
-    if (saved && ['en', 'so', 'ar', 'fr', 'es'].includes(saved)) {
-      return saved as LanguageCode;
-    }
+    if (saved) return saved as LanguageCode;
+    return 'en';
+  });
+
+  const [inputLanguage, setInputLanguageState] = useState<LanguageCode>(() => {
+    const saved = localStorage.getItem('ais_user_input_language');
+    if (saved) return saved as LanguageCode;
+    return 'so'; // Default input language to Somali/Auto
+  });
+
+  const [outputLanguage, setOutputLanguageState] = useState<LanguageCode>(() => {
+    const saved = localStorage.getItem('ais_user_output_language');
+    if (saved) return saved as LanguageCode;
     return 'en';
   });
 
@@ -30,6 +44,16 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       document.documentElement.dir = langObj.dir;
       document.documentElement.lang = lang;
     }
+  };
+
+  const setInputLanguage = (lang: LanguageCode) => {
+    setInputLanguageState(lang);
+    localStorage.setItem('ais_user_input_language', lang);
+  };
+
+  const setOutputLanguage = (lang: LanguageCode) => {
+    setOutputLanguageState(lang);
+    localStorage.setItem('ais_user_output_language', lang);
   };
 
   useEffect(() => {
@@ -59,6 +83,10 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       value={{
         language,
         setLanguage,
+        inputLanguage,
+        setInputLanguage,
+        outputLanguage,
+        setOutputLanguage,
         currentLanguage,
         languages: LANGUAGES,
         t,
@@ -77,6 +105,10 @@ export const useLanguage = (): LanguageContextType => {
     return {
       language: 'en',
       setLanguage: () => {},
+      inputLanguage: 'so',
+      setInputLanguage: () => {},
+      outputLanguage: 'en',
+      setOutputLanguage: () => {},
       currentLanguage: LANGUAGES[0],
       languages: LANGUAGES,
       t: (key: string, defaultText?: string) => defaultText || key,

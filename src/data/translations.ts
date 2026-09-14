@@ -14,12 +14,16 @@ export const LANGUAGES: LanguageOption[] = [
   { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦', dir: 'rtl' },
   { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', dir: 'ltr' },
   { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', dir: 'ltr' },
+  { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇵🇹', dir: 'ltr' },
+  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', dir: 'ltr' },
+  { code: 'it', name: 'Italian', nativeName: 'Italiano', flag: '🇮🇹', dir: 'ltr' },
+  { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷', dir: 'ltr' },
+  { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी', flag: '🇮🇳', dir: 'ltr' },
 ];
 
-export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
-  en: {
-    // Nav & Common
-    home: 'Home',
+const enTranslation: Record<string, string> = {
+  // Nav & Common
+  home: 'Home',
     aiTools: 'AI Tools',
     pdfTools: 'PDF Tools',
     imageTools: 'Image Tools',
@@ -96,7 +100,10 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     managePlans: 'Manage Pricing & Plans',
     systemLogs: 'System & Error Logs',
     backupRestore: 'Database Backup & Restore',
-  },
+};
+
+export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
+  en: enTranslation,
 
   so: {
     home: 'Bogga Hore',
@@ -397,4 +404,9 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     systemLogs: 'Registros del Sistema',
     backupRestore: 'Copia de Seguridad y Restauración',
   },
+  pt: enTranslation,
+  de: enTranslation,
+  it: enTranslation,
+  tr: enTranslation,
+  hi: enTranslation,
 };

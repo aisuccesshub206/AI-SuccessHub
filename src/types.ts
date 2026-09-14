@@ -1,6 +1,6 @@
 export type ToolCategory = 'all' | 'pdf' | 'ai' | 'image' | 'converter';
 
-export type ToolBadge = 'Popular' | 'AI Powered' | 'New' | 'Pro' | 'Fast';
+export type ToolBadge = 'Popular' | 'AI Powered' | 'New' | 'Pro' | 'Fast' | 'Pro Studio' | 'Pro Workspace' | 'CTR Booster';
 
 export interface ToolItem {
   id: string;
@@ -375,7 +375,7 @@ export interface PaymentAuditLog {
 }
 
 // --- VEO 3 VIDEO GENERATOR & WATERMARK REMOVER TYPES ---
-export type LanguageCode = 'en' | 'so' | 'ar' | 'fr' | 'es';
+export type LanguageCode = 'en' | 'so' | 'ar' | 'fr' | 'es' | 'pt' | 'de' | 'it' | 'tr' | 'hi';
 
 export interface Veo3VideoConfig {
   prompt: string;

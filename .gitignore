@@ -6,3 +6,12 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Native build outputs & caches
+android/app/build/
+android/app/build.gradle.kts.d/
+android/.gradle/
+android/build/
+ios/App/build/
+ios/App/Pods/
+ios/App/DerivedData/

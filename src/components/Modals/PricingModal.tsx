@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Crown, Check, Smartphone, CreditCard } from 'lucide-react';
 import { PRICING_PLANS } from '../../data/pricingData';
 import { PricingPlan, UserProfile } from '../../types';
+import { getApiUrl } from '../../services/mobileService';
 
 interface PricingModalProps {
   isOpen: boolean;
@@ -36,7 +37,7 @@ export const PricingModal: React.FC<PricingModalProps> = ({
     setLoadingPlan(planId);
 
     try {
-      const response = await fetch('/api/stripe/checkout', {
+      const response = await fetch(getApiUrl('/api/stripe/checkout'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

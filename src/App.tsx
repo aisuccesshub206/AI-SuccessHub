@@ -9,18 +9,30 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
 import { ToolGrid } from './components/ToolGrid';
+import { AiStatusBanner } from './components/AiStatusBanner';
 
 // Executors
 import { PdfToolStudio } from './components/ToolExecutors/PdfToolStudio';
 import { AiTextStudio } from './components/ToolExecutors/AiTextStudio';
 import { AiChatStudio } from './components/ToolExecutors/AiChatStudio';
 import { AiImageStudio } from './components/ToolExecutors/AiImageStudio';
+import { YouTubeThumbnailStudio } from './components/ToolExecutors/YouTubeThumbnailStudio';
 import { ImageToolStudio } from './components/ToolExecutors/ImageToolStudio';
 import { ConverterStudio } from './components/ToolExecutors/ConverterStudio';
 import { AiResumeStudio } from './components/ToolExecutors/AiResumeStudio';
+import { AiCoverLetterStudio } from './components/ToolExecutors/AiCoverLetterStudio';
+import { AiBlogStudio } from './components/ToolExecutors/AiBlogStudio';
+import { AiYouTubeStudio } from './components/ToolExecutors/AiYouTubeStudio';
 import { AiVideoGeneratorStudio } from './components/ToolExecutors/AiVideoGeneratorStudio';
 import { ImageWatermarkRemoverStudio } from './components/ToolExecutors/ImageWatermarkRemoverStudio';
 import { VideoWatermarkRemoverStudio } from './components/ToolExecutors/VideoWatermarkRemoverStudio';
+import { AiSocialPostStudio } from './components/ToolExecutors/AiSocialPostStudio';
+import { AiPromptStudio } from './components/ToolExecutors/AiPromptStudio';
+import { AiGrammarStudio } from './components/ToolExecutors/AiGrammarStudio';
+import { AiDocumentSummarizerStudio } from './components/ToolExecutors/AiDocumentSummarizerStudio';
+import { AiWritingAssistantStudio } from './components/ToolExecutors/AiWritingAssistantStudio';
+import { AiTranslationStudio } from './components/ToolExecutors/AiTranslationStudio';
+import { AiEmailStudio } from './components/ToolExecutors/AiEmailStudio';
 
 
 // Dashboards
@@ -57,6 +69,7 @@ import { AffiliatePage } from './components/Pages/AffiliatePage';
 import { TeamWorkspacePage } from './components/Pages/TeamWorkspacePage';
 import { SupportCenterPage } from './components/Pages/SupportCenterPage';
 import { MobileHubPage } from './components/Pages/MobileHubPage';
+import { registerBackButtonHandler } from './services/mobileService';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<string>('home');
@@ -199,6 +212,27 @@ export default function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+
+  // Capacitor Native Android Back Button Handler
+  useEffect(() => {
+    const unregister = registerBackButtonHandler(() => {
+      if (authModalOpen || pricingModalOpen || evcModalOpen || commandPaletteOpen || notificationCenterOpen || usageLimitModalOpen || subscriptionManagementModalOpen) {
+        setAuthModalOpen(false);
+        setPricingModalOpen(false);
+        setEvcModalOpen(false);
+        setCommandPaletteOpen(false);
+        setNotificationCenterOpen(false);
+        setUsageLimitModalOpen(false);
+        setSubscriptionManagementModalOpen(false);
+      } else if (activeToolId) {
+        setActiveToolId(null);
+      } else if (currentPage !== 'home') {
+        setCurrentPage('home');
+      }
+    });
+
+    return () => unregister();
+  }, [authModalOpen, pricingModalOpen, evcModalOpen, commandPaletteOpen, notificationCenterOpen, usageLimitModalOpen, subscriptionManagementModalOpen, activeToolId, currentPage]);
 
   // Toggle favorite
   const handleToggleFavorite = (toolId: string) => {
@@ -652,10 +686,205 @@ export default function App() {
       );
     }
 
-    if (activeToolId === 'ai-image-generator' || activeToolId === 'ai-thumbnail-generator') {
+    if (activeToolId === 'ai-thumbnail-generator') {
+      return (
+        <YouTubeThumbnailStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
 
+    if (activeToolId === 'ai-image-generator') {
       return (
         <AiImageStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
+
+    if (activeToolId === 'ai-cover-letter') {
+      return (
+        <AiCoverLetterStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
+
+    if (activeToolId === 'ai-blog-generator' || activeToolId === 'ai-blog-writer' || activeToolId === 'blog-writer') {
+      return (
+        <AiBlogStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
+
+    if (activeToolId === 'ai-youtube-script' || activeToolId === 'youtube-script' || activeToolId === 'ai-youtube-studio') {
+      return (
+        <AiYouTubeStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
+
+    if (activeToolId === 'ai-social-post-generator' || activeToolId === 'social-post' || activeToolId === 'ai-social-post') {
+      return (
+        <AiSocialPostStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+        />
+      );
+    }
+
+    if (
+      activeToolId === 'ai-prompt-engineer' ||
+      activeToolId === 'prompt-engineer' ||
+      activeToolId === 'ai-prompt-studio' ||
+      activeToolId === 'ai-prompt-generator' ||
+      activeToolId === 'prompt-generator'
+    ) {
+      return (
+        <AiPromptStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onNavigateToTool={(toolId, promptText) => {
+            if (promptText) {
+              sessionStorage.setItem('ais_transfer_prompt', promptText);
+            }
+            setActiveToolId(toolId);
+          }}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
+
+    if (activeToolId === 'ai-grammar' || activeToolId === 'ai-proofreader' || activeToolId === 'grammar-checker' || activeToolId === 'ai-grammar-checker') {
+      return (
+        <AiGrammarStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+        />
+      );
+    }
+
+    if (activeToolId === 'ai-summarizer' || activeToolId === 'ai-document-summarizer' || activeToolId === 'summarize-doc' || activeToolId === 'pdf-summarizer') {
+      return (
+        <AiDocumentSummarizerStudio
+          user={user}
+          initialFile={initialFile}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
+
+    if (
+      activeToolId === 'ai-writing-assistant' ||
+      activeToolId === 'ai-writer' ||
+      activeToolId === 'writing-assistant' ||
+      activeToolId === 'ai-editor' ||
+      activeToolId === 'ai-article-writer'
+    ) {
+      return (
+        <AiWritingAssistantStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
+
+    if (
+      activeToolId === 'ai-email-writer' ||
+      activeToolId === 'ai-email' ||
+      activeToolId === 'email-writer' ||
+      activeToolId === 'ai-cold-email' ||
+      activeToolId === 'ai-email-reply' ||
+      activeToolId === 'email-generator'
+    ) {
+      return (
+        <AiEmailStudio
+          user={user}
+          onBack={() => {
+            setActiveToolId(null);
+            setCurrentPage('home');
+          }}
+          onLogFileProcess={handleLogFileProcess}
+          onIncrementAiUsage={handleIncrementAiUsage}
+          onTriggerUsageLimit={(reason) => handleTriggerUsageLimitModal(reason)}
+        />
+      );
+    }
+
+    if (
+      activeToolId === 'ai-translator' ||
+      activeToolId === 'translator' ||
+      activeToolId === 'ai-multi-language-translator' ||
+      activeToolId === 'language-translator' ||
+      activeToolId === 'ai-language-translator' ||
+      activeToolId === 'multi-language-translator'
+    ) {
+      return (
+        <AiTranslationStudio
           user={user}
           onBack={() => {
             setActiveToolId(null);
@@ -945,6 +1174,16 @@ export default function App() {
         currentPage={currentPage}
         darkMode={darkMode}
         onToggleDarkMode={() => setDarkMode(!darkMode)}
+      />
+
+      {/* Global Non-Intrusive AI Status Banner */}
+      <AiStatusBanner
+        onSelectCategory={(cat) => {
+          setActiveCategory(cat as ToolCategory);
+          setCurrentPage('home');
+          setActiveToolId(null);
+        }}
+        onSelectTool={handleSelectTool}
       />
 
       {/* Page Content */}

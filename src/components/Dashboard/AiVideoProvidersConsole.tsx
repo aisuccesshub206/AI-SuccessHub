@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../../services/mobileService';
 import {
   Video,
   Plus,
@@ -71,7 +72,7 @@ export const AiVideoProvidersConsole: React.FC = () => {
   const fetchProviders = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/admin/video-providers');
+      const res = await fetch(getApiUrl('/api/admin/video-providers'));
       if (res.ok) {
         const data = await res.json();
         setProviders(data.providers || []);
@@ -85,7 +86,7 @@ export const AiVideoProvidersConsole: React.FC = () => {
 
   const fetchLogs = async () => {
     try {
-      const res = await fetch('/api/admin/video-providers/logs');
+      const res = await fetch(getApiUrl('/api/admin/video-providers/logs'));
       if (res.ok) {
         const data = await res.json();
         setLogs(data.logs || []);
@@ -131,7 +132,7 @@ export const AiVideoProvidersConsole: React.FC = () => {
     try {
       if (editingProvider) {
         // Edit existing
-        const res = await fetch(`/api/admin/video-providers/${editingProvider.id}`, {
+        const res = await fetch(getApiUrl(`/api/admin/video-providers/${editingProvider.id}`), {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -150,7 +151,7 @@ export const AiVideoProvidersConsole: React.FC = () => {
         }
       } else {
         // Add new
-        const res = await fetch('/api/admin/video-providers', {
+        const res = await fetch(getApiUrl('/api/admin/video-providers'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -178,7 +179,7 @@ export const AiVideoProvidersConsole: React.FC = () => {
     if (!confirm(`Are you sure you want to delete the AI Video Provider "${name}"?`)) return;
 
     try {
-      const res = await fetch(`/api/admin/video-providers/${id}`, { method: 'DELETE' });
+      const res = await fetch(getApiUrl(`/api/admin/video-providers/${id}`), { method: 'DELETE' });
       if (res.ok) {
         fetchProviders();
         fetchLogs();
@@ -190,7 +191,7 @@ export const AiVideoProvidersConsole: React.FC = () => {
 
   const handleToggleEnable = async (provider: VideoProviderClient) => {
     try {
-      const res = await fetch(`/api/admin/video-providers/${provider.id}`, {
+      const res = await fetch(getApiUrl(`/api/admin/video-providers/${provider.id}`), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ enabled: !provider.enabled }),
@@ -206,7 +207,7 @@ export const AiVideoProvidersConsole: React.FC = () => {
 
   const handleSetDefault = async (provider: VideoProviderClient) => {
     try {
-      const res = await fetch(`/api/admin/video-providers/${provider.id}`, {
+      const res = await fetch(getApiUrl(`/api/admin/video-providers/${provider.id}`), {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isDefault: true, enabled: true }),
@@ -225,7 +226,8 @@ export const AiVideoProvidersConsole: React.FC = () => {
     setTestResult(null);
 
     try {
-      const res = await fetch(`/api/admin/video-providers/${id}/test`, { method: 'POST' });
+      const res = await fetch(getApiUrl(`/api/admin/video-providers/${id}/test`), { method: 'POST' });
+
       const data = await res.json();
 
       setTestResult({
